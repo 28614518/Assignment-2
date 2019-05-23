@@ -1,0 +1,110 @@
+package javaapplication6;
+
+
+import java.io.*;
+
+public class Paging {
+    
+    
+//Main - contains code for output structure    
+                public static void main(String[] args) throws IOException{
+		
+                    Paging p = new Paging();
+                    p.read();
+                    p.fifo();
+				
+				
+                        System.out.printf("\n");
+			int i,j;
+                        for (i = 0; i <= p.n; i++){ 
+                            if (i == 0){System.out.printf(" %-2s    "," "); } 
+                            else { System.out.printf(" %-2d |",i); }
+                        }
+                        System.out.printf("\n");
+			for (i = 0; i < p.f; i++){
+                                System.out.printf(" %-2d |  ",i);
+				for (j = 0; j < p.n; j++){
+					System.out.printf(" %-2s |",p.dframe[i][j]);
+				}
+				System.out.printf("\n");
+			}
+                 }
+///////////////////////////////////////////////////////////////////////////////////////////////
+    
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	int n, page[], f, frames[], counter;
+	String[][] dframe = new String[50][50];
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+	public Paging() throws IOException{
+	
+		System.out.printf("\nNumber of page frames: ");
+		f = Integer.parseInt(input.readLine());
+		frames = new int[f];
+		counter = 1;
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+	void reset(){
+		int j;
+		for(j=0;j<f;j++) { frames[j]=0; }
+		counter=1;
+	}
+////////////////////////////////////////////////////////////////////////////////////////////
+
+	void read() throws IOException{
+		int i;
+		String order;
+        String[] ord;
+		
+		System.out.println("Enter order of pages:");
+        order = input.readLine();
+        ord = order.split(" ");
+		
+		n = ord.length;
+		
+		page = new int[n];
+		for(i=0;i<n;i++){
+			page[i]=Integer.parseInt( ord[i] );
+		}
+		for(i=0;i<f;i++) { frames[i]=-1; }
+	}
+///////////////////////////////////////////////////////////////////////////////////////////
+
+	void fifo(){
+		int i,j,k=0;
+		reset();
+		boolean found=false;
+		for(i=0;i<n;i++){
+			for(j=0;j<f;j++){
+				if(page[i]==frames[j]) { found=true; }
+			}
+			if(found==false){
+				frames[k]=page[i];
+				if(k==f-1) {
+						k=0;
+					}
+				else {
+						k++;
+					}
+			}
+			display();
+			found=false;
+		}
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+	void display(){
+		int i;
+		for(i=0;i<f;i++){
+			if(frames[i]==-1 || frames[i] == 0) { dframe[i][counter-1] = "-"; }
+			else { dframe[i][counter-1] = ""+frames[i]; }
+		}
+		
+		counter++;
+	}
+//////////////////////////////////////////////////////////////////////////////////////////
+		 
+	
+}
